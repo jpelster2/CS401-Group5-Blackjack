@@ -1,10 +1,12 @@
 public class message {
     private String text;
     private int specialData;
+    private String status;
 
     public message(String text, int specialData) {
         this.text = text;
         this.specialData = specialData;
+        this.status = status;
     }
 
     public void messageprint() {
@@ -12,6 +14,6 @@ public class message {
     }
 
     public String getMessage() {
-        return this.text + this.specialData;
+        return this.text + this.specialData + " (" + this.status + ")";
     }
 }
