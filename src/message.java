@@ -6,7 +6,7 @@ public class Message {
 
     public Message(String text, int specialData) {
         this.type = MessageType;
-        this.action = action
+        this.action = action;
         this.text = text;
         this.specialData = specialData;
     }
