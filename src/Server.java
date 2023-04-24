@@ -45,7 +45,7 @@ public class Server {
 	
 	private static class ClientHandler implements Runnable {
 		private enum ClientStatus {
-			NONE,
+			NOT_LOGGED_IN,
 			IN_LOBBY,
 			IN_GAME
 		}
@@ -56,7 +56,7 @@ public class Server {
 		
 		public ClientHandler(Socket socket) {
 			clientSocket = socket;
-			status = ClientStatus.NONE;
+			status = ClientStatus.NOT_LOGGED_IN;
 			tableNum = -1;
 		}
 		
