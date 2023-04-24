@@ -1,19 +1,21 @@
-public class message {
+public class Message {
+    private MessageType type;
+    private String action;
     private String text;
     private int specialData;
-    private String status;
 
-    public message(String text, int specialData) {
+    public Message(String action, String text, int specialData) {
+        this.type = MessageType;
+        this.action = action;
         this.text = text;
         this.specialData = specialData;
-        this.status = status;
     }
 
-    public void messageprint() {
+    public void Messageprint() {
         System.out.println ("Message sent: " + this.text);
     }
 
     public String getMessage() {
-        return this.text + this.specialData + " (" + this.status + ")";
+        return this.text + this.specialData + " (" + this.action + ")";
     }
 }
