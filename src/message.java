@@ -5,7 +5,7 @@ public class Message {
     private int specialData;
 
     public Message(String action, String text, int specialData) {
-        this.type = MessageType;
+        this.type = MessageType.LOGIN;
         this.action = action;
         this.text = text;
         this.specialData = specialData;
