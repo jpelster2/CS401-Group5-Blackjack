@@ -16,6 +16,6 @@ public class Message {
     }
 
     public String getMessage() {
-        return this.text + this.specialData + " (" + this.action + ")";
+        return this.text + this.specialData + this.action;
     }
 }
