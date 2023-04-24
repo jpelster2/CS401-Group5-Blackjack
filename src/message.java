@@ -4,7 +4,7 @@ public class Message {
     private String text;
     private int specialData;
 
-    public Message(String text, int specialData) {
+    public Message(String action, String text, int specialData) {
         this.type = MessageType;
         this.action = action;
         this.text = text;
