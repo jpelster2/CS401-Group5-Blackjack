@@ -4,7 +4,7 @@ public class Message {
     private String text;
     private int specialData;
 
-    public Message(String action, String text, int specialData) {
+    public Message(MessageType type, String action, String text, int specialData) {
         this.type = MessageType.LOGIN;
         this.action = action;
         this.text = text;
@@ -17,11 +17,15 @@ public class Message {
         System.out.println ("Action: " + this.action);
     }
     
+    public MessageType getType() {
+        return this.type;
+    }
+    
     public String getText() {
         return this.text;
     }
     
-    public String getspecialData() {
+    public int getspecialData() {
         return this.specialData;
     }
     
