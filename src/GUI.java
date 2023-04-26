@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class GUI {
 
@@ -16,7 +18,7 @@ public class GUI {
     private JButton leaveGameButton;
 
 
-    public GUI() {
+    public GUI(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
         initialize();
     }
 
@@ -72,7 +74,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                //lobby();
+                client.lobby(null, null);
             }
         });
     }
