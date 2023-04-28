@@ -248,7 +248,7 @@ public class Client {
 		
 			gameMessage = (Message)objectInputStream.readObject();//read changed message
 		
-			return gameMessage.getText(); //the message that stand has will need to be the dealers current hand at beginning of round 
+			return gameMessage.getText(); //the message that game has will need to be the dealers current hand at beginning of round 
 			//for example: 10 of hearts
 		
 		}catch (ClassNotFoundException | IOException e) {
