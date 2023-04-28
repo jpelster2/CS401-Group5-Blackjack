@@ -64,7 +64,7 @@ public class Client {
 	public static void doJoinGame1(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join","1",0); 
+			Message joinGameMessage = new Message(MessageType.LOBBY, "join","1",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -82,7 +82,7 @@ public class Client {
 	public static void doJoinGame2(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join","2",0); 
+			Message joinGameMessage = new Message(MessageType.LOBBY, "join","2",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -100,7 +100,7 @@ public class Client {
 	public static void doJoinGame3(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join","3",0); 
+			Message joinGameMessage = new Message(MessageType.LOBBY, "join","3",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -118,7 +118,7 @@ public class Client {
 	public static void doJoinGame4(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join","4",0); 
+			Message joinGameMessage = new Message(MessageType.LOBBY, "join","4",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
