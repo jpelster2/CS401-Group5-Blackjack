@@ -84,14 +84,16 @@ public class Server {
 					Message reply = null;
 					
 					MessageType type = msg.getType();
+					String action = msg.getAction();
+					String text = msg.getText();
 					switch (type) {
 					case LOGIN:
-						if (msg.getAction().equals("login")) {
+						if (action.equals("login")) {
 							reply = new Message(MessageType.LOGIN, "login", "success", 0);
 							status = ClientStatus.IN_LOBBY;
 							username = msg.getText();
 							System.out.println("User \""+username+"\" logged in.");
-						} else if (msg.getAction().equals("logout")) {
+						} else if (action.equals("logout")) {
 							reply = new Message(MessageType.LOGIN, "logout", "success", 0);
 							status = ClientStatus.NOT_LOGGED_IN;
 							exit = true;
@@ -99,6 +101,23 @@ public class Server {
 						}
 						break;
 					case BALANCE:
+						if (action.equals("request")) {
+							reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+							System.out.println("User \""+username+"\" requested their balance info.");
+						} else if (action.equals("add")) {
+							balance += Integer.valueOf(text);
+							reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+							System.out.println("User \""+username+"\" added $"+text+" to their balance.");
+						} else if (action.equals("remove")) {
+							if (balance - Integer.valueOf(text) < 0) {
+								reply = new Message(MessageType.BALANCE, "error", Integer.toString(balance), 0);
+								System.out.println("User \""+username+"\" tried to subtract $"+text+" from their balance, but didn't have enough money.");
+							} else {
+								balance -= Integer.valueOf(text);
+								reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+								System.out.println("User \""+username+"\" subtracted $"+text+" from their balance.");
+							}
+						}
 						break;
 					case GAME:
 						break;
