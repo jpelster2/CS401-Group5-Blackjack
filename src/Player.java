@@ -1,10 +1,10 @@
-
+import java.util.*;
 public class Player {
 	private String id; 
 	private String username; 
 	private String password; 
 	private float balance;
-	//private ArrayList<Card> hand; 
+	private ArrayList<Card> hand; 
 	private float currentBet; 
 	
 	public Player(String username, String password, float balance){
