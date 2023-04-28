@@ -48,12 +48,12 @@ public class client {
 			
 			switch (choice) {
 		 	case 0: doJoinGame1(objectOutputStream, objectInputStream); break;
-		 	case 1: doJoinGame2(); break;
-		 	case 2: doJoinGame3(); break;
-		 	case 3: doJoinGame4(); break;
-		 	case 4: Player.getBalance(); break;
-		 	case 5: Player.addFunds(); break;
-		 	case 6: Player.removeFunds(); break;
+		 	case 1: doJoinGame2(objectOutputStream, objectInputStream); break;
+		 	case 2: doJoinGame3(objectOutputStream, objectInputStream); break;
+		 	case 3: doJoinGame4(objectOutputStream, objectInputStream); break;
+		 	case 4: doGetBalance(objectOutputStream, objectInputStream); break;
+		 	case 5: doAddFunds(objectOutputStream, objectInputStream); break;
+		 	case 6: doRemoveFunds(objectOutputStream, objectInputStream); break;
 		 	case 7: doLogout(objectOutputStream, objectInputStream); break;
 		 	default:  // do nothing
 		 }
@@ -79,6 +79,107 @@ public class client {
 		} 
 	}
 	
+	public static void doJoinGame2(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
+		
+			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
+			JOptionPane.showMessageDialog(null, "Joined Game 2 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			
+			new GUI(objectOutputStream, objectInputStream);
+			
+		
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+
+	public static void doJoinGame3(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
+		
+			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
+			JOptionPane.showMessageDialog(null, "Joined Game 3 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			
+			new GUI(objectOutputStream, objectInputStream);
+			
+		
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	public static void doJoinGame4(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
+		
+			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
+			JOptionPane.showMessageDialog(null, "Joined Game 4 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			
+			new GUI(objectOutputStream, objectInputStream);
+			
+		
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	public static void doAddFunds(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			String addBalance = JOptionPane.showInputDialog("Enter the amount to add: ");
+			Message balanceMessage = new Message(MessageType.BALANCE, "add",addBalance,0); //sends message that has a balance type with add action and amount to add
+			objectOutputStream.writeObject(balanceMessage); //send to server logout request
+		
+			balanceMessage = (Message)objectInputStream.readObject();//read changed message
+			JOptionPane.showMessageDialog(null, "User Balance updated to: "+balanceMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
+		
+		} catch (ClassNotFoundException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		} 
+	}
+	
+	public static void doRemoveFunds(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			String removeBalance = JOptionPane.showInputDialog("Enter the amount to remove: ");
+			Message balanceMessage = new Message(MessageType.BALANCE, "remove",removeBalance,0); //sends message that has a balance type with add action and amount to remove
+			objectOutputStream.writeObject(balanceMessage); //send to server logout request
+		
+			balanceMessage = (Message)objectInputStream.readObject();//read changed message
+			JOptionPane.showMessageDialog(null, "User Balance updated to: "+balanceMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
+		
+		} catch (ClassNotFoundException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		} 
+	}
+	
+	public static void doGetBalance(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try {
+			Message balanceMessage = new Message(MessageType.BALANCE, "request",null,0);
+			objectOutputStream.writeObject(balanceMessage); //send to server logout request
+		
+			balanceMessage = (Message)objectInputStream.readObject();//read changed message
+			JOptionPane.showMessageDialog(null, "User Balance: "+balanceMessage.getText(),"Balance Inquiry", JOptionPane.INFORMATION_MESSAGE);
+		
+		} catch (ClassNotFoundException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		} 
+	}
+	
 	public static void doLogout(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
@@ -96,6 +197,64 @@ public class client {
 		e.printStackTrace();
 		} 
 	}
+	
+	public static String doHit(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try{
+			Message hitMessage = new Message(MessageType.GAME, "hit" , null, 0);
+			objectOutputStream.writeObject(hitMessage); //send to server logout request
+		
+			hitMessage = (Message)objectInputStream.readObject();//read changed message
+		
+			return hitMessage.getText();
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
+	
+	public static String doStand(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try{
+			Message standMessage = new Message(MessageType.GAME, "hit" , null, 0);
+			objectOutputStream.writeObject(standMessage); //send to server logout request
+		
+			standMessage = (Message)objectInputStream.readObject();//read changed message
+		
+			return standMessage.getText(); //the message that stand has will need to be the dealers full deck after and hits it makes 
+			//for example: 10 of hearts, queen(10) of spades, 1 of diamonds
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
+	
+	public static String doGameState(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+		
+		try{
+			Message gameMessage = new Message(MessageType.GAME, "hit" , null, 0);
+			objectOutputStream.writeObject(gameMessage); //send to server logout request
+		
+			gameMessage = (Message)objectInputStream.readObject();//read changed message
+		
+			return gameMessage.getText(); //the message that stand has will need to be the dealers current hand at beginning of round 
+			//for example: 10 of hearts
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
+	
+	
 }
 	
 	
