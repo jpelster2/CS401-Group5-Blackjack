@@ -7,11 +7,16 @@ import java.util.ArrayList;
 // the "Object Over Socket Networking" and "Threaded Networking" examples,
 // as well as Assignment 5. This file created by James Pelster on 04/24/2023.
 public class Server {
-	//ArrayList<Game> gameList;
+	public static ArrayList<Game> gameList;
 	
 	public static void main(String[] args){
 		ServerSocket serverSocket = null;
-		//gameList = new ArrayList<Game>();
+		gameList = new ArrayList<Game>();
+		
+		// Initialize the game instances, we have 4 tables.
+		for (int i = 0; i < 4; ++i) {
+			gameList.add(new Game());
+		}
 		
 		try {
 			// Create a server socket on port 5555, that can be reused for multiple connections
@@ -59,6 +64,7 @@ public class Server {
 		private ClientStatus status;
 		private int tableNum;
 		private int balance;
+		private Player player;
 		
 		public ClientHandler(Socket socket) {
 			clientSocket = socket;
@@ -66,6 +72,7 @@ public class Server {
 			tableNum = -1;
 			balance = 100;
 			username = "";
+			player = null;
 		}
 		
 		public void run() {
@@ -92,6 +99,10 @@ public class Server {
 							reply = new Message(MessageType.LOGIN, "login", "success", 0);
 							status = ClientStatus.IN_LOBBY;
 							username = msg.getText();
+							player = new Player();
+							player.setUsername(username);
+							player.setBalance(balance);
+							player.setId(username);
 							System.out.println("User \""+username+"\" logged in.");
 						} else if (action.equals("logout")) {
 							reply = new Message(MessageType.LOGIN, "logout", "success", 0);
@@ -106,6 +117,7 @@ public class Server {
 							System.out.println("User \""+username+"\" requested their balance info.");
 						} else if (action.equals("add")) {
 							balance += Integer.valueOf(text);
+							player.setBalance(balance);
 							reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
 							System.out.println("User \""+username+"\" added $"+text+" to their balance.");
 						} else if (action.equals("remove")) {
@@ -114,6 +126,7 @@ public class Server {
 								System.out.println("User \""+username+"\" tried to subtract $"+text+" from their balance, but didn't have enough money.");
 							} else {
 								balance -= Integer.valueOf(text);
+								player.setBalance(balance);
 								reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
 								System.out.println("User \""+username+"\" subtracted $"+text+" from their balance.");
 							}
@@ -122,6 +135,27 @@ public class Server {
 					case GAME:
 						break;
 					case LOBBY:
+						// Join action
+						if (action.equals("join") && status == ClientStatus.IN_LOBBY) {
+							int tableToJoin = Integer.valueOf(text) - 1;
+							// Check to make sure player is only joining a valid table.
+							if (tableToJoin >= 0 && tableToJoin < gameList.size()) {
+								tableNum = tableToJoin;
+								status = ClientStatus.IN_GAME;
+								gameList.get(tableToJoin).getGameLobby().add(player);
+								reply = new Message(MessageType.LOBBY, "success", null, 0);
+								System.out.println("User \""+username+"\" joined game table "+text);
+							// Fail if they try to join a nonexistent table.
+							} else {
+								reply = new Message(MessageType.LOBBY, "error", null, 0);
+							}
+						// Leave action
+						} else if (action.equals("leave") && status == ClientStatus.IN_GAME) {
+							gameList.get(tableNum).getGameLobby().remove(player);
+							tableNum = -1;
+							status = ClientStatus.IN_LOBBY;
+							reply = new Message(MessageType.LOBBY, "success", null, 0);
+						}
 						break;
 					}
 					

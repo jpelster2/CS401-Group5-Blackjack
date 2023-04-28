@@ -17,6 +17,8 @@ public class Game {
 	}
 	public Game() {
 		setActivity(true);
+		// I added this
+		gameLobby = new ArrayList<Player>();
 	}
 	 public void setId(int id) {
 		this.id = id; 
