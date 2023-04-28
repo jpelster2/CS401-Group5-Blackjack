@@ -37,7 +37,7 @@ public class GUI {
 
         dealerHandLabel = new JLabel("Dealer's hand: ");
         topPanel.add(dealerHandLabel);
-        String dealerHand = client.doGameState(objectOutputStream, objectInputStream);
+        String dealerHand = Client.doGameState(objectOutputStream, objectInputStream);
         dealerHandLabel.setText(dealerHandLabel.getText()+" "+dealerHand);
         playerHandLabel = new JLabel("Player's hand: ");
         topPanel.add(playerHandLabel);
@@ -57,7 +57,7 @@ public class GUI {
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	String hit = client.doHit(objectOutputStream, objectInputStream);
+            	String hit = Client.doHit(objectOutputStream, objectInputStream);
             	statusLabel.setText(statusLabel.getText()+" Player has hit");
             	playerHandLabel.setText(playerHandLabel.getText()+" "+hit);
             }
@@ -74,7 +74,7 @@ public class GUI {
                 
                 statusLabel.setText(statusLabel.getText()+" Player has passed their turn");
                 
-                String stand = client.doStand(objectOutputStream, objectInputStream);
+                String stand = Client.doStand(objectOutputStream, objectInputStream);
                 
                 statusLabel.setText(statusLabel.getText()+" Dealer has taken its turn");
                 dealerHandLabel.setText(dealerHandLabel.getText()+" "+stand);
@@ -88,7 +88,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
             	statusLabel.setText(statusLabel.getText()+" Player Left");
             	frame.dispose();
-                client.lobby(null, null);
+                Client.lobby(null, null);
             }
         });
         

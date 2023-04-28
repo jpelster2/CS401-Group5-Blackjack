@@ -5,7 +5,7 @@ import javax.imageio.*;
 import javax.swing.*;
 
 
-public class client {
+public class Client {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String serverAddress = JOptionPane.showInputDialog("Enter the address you want to connect to");
 		int serverPort = Integer.parseInt(JOptionPane.showInputDialog("Enter the port you want to connect to"));
