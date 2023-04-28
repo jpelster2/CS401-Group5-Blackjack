@@ -64,7 +64,7 @@ public class Client {
 	public static void doJoinGame1(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			Message joinGameMessage = new Message(MessageType.GAME, "join","1",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -82,7 +82,7 @@ public class Client {
 	public static void doJoinGame2(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			Message joinGameMessage = new Message(MessageType.GAME, "join","2",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -100,7 +100,7 @@ public class Client {
 	public static void doJoinGame3(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			Message joinGameMessage = new Message(MessageType.GAME, "join","3",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -118,7 +118,7 @@ public class Client {
 	public static void doJoinGame4(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try {
-			Message joinGameMessage = new Message(MessageType.GAME, "join",null,0); 
+			Message joinGameMessage = new Message(MessageType.GAME, "join","4",0); 
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
@@ -157,8 +157,13 @@ public class Client {
 			objectOutputStream.writeObject(balanceMessage); //send to server logout request
 		
 			balanceMessage = (Message)objectInputStream.readObject();//read changed message
+			
+			if(balanceMessage.getAction().toString().equals("error")){
+				JOptionPane.showMessageDialog(null, "Cannot go to a negative balance. Nothing was done","Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+			else {
 			JOptionPane.showMessageDialog(null, "User Balance updated to: "+balanceMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
-		
+			}
 		} catch (ClassNotFoundException | IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
