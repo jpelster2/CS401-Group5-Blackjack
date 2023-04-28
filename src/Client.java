@@ -44,7 +44,7 @@ public class Client {
 		String[] commands = {"Join Game 1","Join Game 2","Join Game 3","Join game 4","Get Balance","Add Balance","Remove Balance","Logout"};
 		do {
 
-			choice = JOptionPane.showOptionDialog(null,"Select a command", "DVD Collection", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, commands,commands[commands.length - 1]);
+			choice = JOptionPane.showOptionDialog(null,"Select a command", "Blackjack Lobby", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, commands,commands[commands.length - 1]);
 			
 			switch (choice) {
 		 	case 0: doJoinGame1(objectOutputStream, objectInputStream); break;
