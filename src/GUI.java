@@ -19,10 +19,10 @@ public class GUI {
 
 
     public GUI(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
-        initialize();
+        initialize(objectOutputStream, objectInputStream);
     }
 
-    private void initialize() {
+    private void initialize(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
         frame = new JFrame("Blackjack");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -37,6 +37,8 @@ public class GUI {
 
         dealerHandLabel = new JLabel("Dealer's hand: ");
         topPanel.add(dealerHandLabel);
+        String dealerHand = client.doGameState(objectOutputStream, objectInputStream);
+        dealerHandLabel.setText(dealerHandLabel.getText()+" "+dealerHand);
         playerHandLabel = new JLabel("Player's hand: ");
         topPanel.add(playerHandLabel);
 
@@ -55,7 +57,9 @@ public class GUI {
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	playerHandLabel.setText("Player's hand: 10 of Hearts");
+            	String hit = client.doHit(objectOutputStream, objectInputStream);
+            	statusLabel.setText(statusLabel.getText()+" Player has hit");
+            	playerHandLabel.setText(playerHandLabel.getText()+" "+hit);
             }
         });
 
@@ -64,7 +68,16 @@ public class GUI {
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement stand action
+            	//disable buttons until the dealers turn comes and the round is over. 
+            	hitButton.setEnabled(false);
+                standButton.setEnabled(false);
+                
+                statusLabel.setText(statusLabel.getText()+" Player has passed their turn");
+                
+                String stand = client.doStand(objectOutputStream, objectInputStream);
+                
+                statusLabel.setText(statusLabel.getText()+" Dealer has taken its turn");
+                dealerHandLabel.setText(dealerHandLabel.getText()+" "+stand);
             }
         });
         
@@ -73,9 +86,11 @@ public class GUI {
         leaveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();
+            	statusLabel.setText(statusLabel.getText()+" Player Left");
+            	frame.dispose();
                 client.lobby(null, null);
             }
         });
+        
     }
 }
