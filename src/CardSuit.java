@@ -13,7 +13,7 @@ public enum CardSuit {
 	        case CLUBS:
 	            return "Clubs";
 	        case HEARTS:
-	            return "Herats";
+	            return "Hearts";
 	        case DIAMONDS:
 	            return "Diamonds";
 	        default:
