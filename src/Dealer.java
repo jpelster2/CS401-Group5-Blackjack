@@ -101,4 +101,26 @@ public class Dealer {
 		card = new Card(10, str.toString(), Suit);
 		deck.add(card);
 	}
+	public ArrayList<Card> getHand(){
+		return hand;
+	}
+	public int currentScore() {
+		// Cards 2-10 are worth their face value 
+		// Face cards jack, queen, king are worth 10 
+		int score = 0;
+		boolean hasAce = false; 
+		ArrayList<Card>hand = getHand(); 
+		for(int i = 0; i < hand.size(); i++) {
+			int holding = hand.get(i).getValue(); 
+			score+=holding; 
+			if(holding == 11) {
+				hasAce = true;
+			}
+		}
+		if((score > 21) && (hasAce == true)) {
+			score = score - 10; 
+			System.out.println("The total score is above 21 therefore the value of Ace has been changed from 11 to 1");
+		}
+		return score;
+	}
 }
