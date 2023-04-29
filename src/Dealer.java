@@ -78,13 +78,25 @@ public class Dealer {
 			deck.add(card);
 		}
 		//makes face cards and aces
-		card = new Card(1, "Ace", Suit);
+		str.setLength(0);//clear str
+		str.append("Ace of ");
+		str.append(Suit.toString());
+		card = new Card(1, str.toString(), Suit);
 		deck.add(card);
-		card = new Card(10, "Jack", Suit);
+		str.setLength(0);//clear str
+		str.append("Jack of ");
+		str.append(Suit.toString());
+		card = new Card(10, str.toString(), Suit);
 		deck.add(card);
-		card = new Card(10, "Queen", Suit);
+		str.setLength(0);//clear str
+		str.append("Queen of ");
+		str.append(Suit.toString());
+		card = new Card(10, str.toString(), Suit);
 		deck.add(card);
-		card = new Card(10, "King", Suit);
+		str.setLength(0);//clear str
+		str.append("King of ");
+		str.append(Suit.toString());
+		card = new Card(10, str.toString(), Suit);
 		deck.add(card);
 	}
 	
