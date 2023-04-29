@@ -74,6 +74,8 @@ public class Dealer {
 		for (int i = 2; i < 11; i++) {
 			str.setLength(0);//clear str
 			str.append(i);
+			str.append(" of ");
+			str.append(Suit.toString());
 			card = new Card(i, str.toString(), Suit);
 			deck.add(card);
 		}
