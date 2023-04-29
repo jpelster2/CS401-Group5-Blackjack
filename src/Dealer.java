@@ -14,5 +14,11 @@ public class Dealer {
 	public void shuffle() {
 		//shuffle remaining cards
 	}
-	
+	public Card dealCard() {
+		Card card = new Card(0, "placeholder", CardSuit.CLOVERS);
+		return card;
+	}
+	public void emptyHand() {
+		//discard hand
+	}
 }
