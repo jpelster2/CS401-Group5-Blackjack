@@ -60,6 +60,9 @@ public class Player {
 	}
 	public void removeFunds(float funds) {
 		float newBalance = getBalance() - funds;
+		if (newBalance < 0) {
+			newBalance = 0; 
+		}
 		setBalance(newBalance);
 	}
 	public void increaseBet(float amount) {
