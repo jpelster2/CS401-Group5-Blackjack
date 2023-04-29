@@ -9,13 +9,13 @@ public enum CardSuit {
 	public String toString() {//for using stringbuilder with card names
 	    switch (this) {
 	        case SPADES:
-	            return "SPADES";
+	            return "Spades";
 	        case CLUBS:
-	            return "CLUBS";
+	            return "Clubs";
 	        case HEARTS:
-	            return "HEARTS";
+	            return "Herats";
 	        case DIAMONDS:
-	            return "DIAMONDS";
+	            return "Diamonds";
 	        default:
 	            return null;
 	    }
