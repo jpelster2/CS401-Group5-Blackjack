@@ -9,16 +9,30 @@ public class Dealer {
 	}
 	
 	public void reset() {
-		//fill a new deck
+		//fill a new deck, loop by suit and # of decks
+		
 	}
 	public void shuffle() {
 		//shuffle remaining cards
 	}
 	public Card dealCard() {
-		Card card = new Card(0, "placeholder", CardSuit.CLOVERS);
+		Card card = new Card(0, "placeholder", CardSuit.CLOVERS);//should eventually draw from deck
 		return card;
+	}
+	public int getRemaining() {//deck size
+		int total = deck.size();
+		return total;
+	}
+	public int handTotal() {
+		int total = 0;
+		for (Card i: hand) {
+			total += i.getValue();
+		}
+		return total;
 	}
 	public void emptyHand() {
 		//discard hand
+		hand.clear();
 	}
+	
 }
