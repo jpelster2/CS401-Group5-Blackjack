@@ -1,17 +1,12 @@
 import java.util.*;
+
 public class Dealer {
 	private ArrayList<Card> deck;
 	private ArrayList<Card> hand;
 	
 	public Dealer() {
-		reset();//call reset to get a fresh deck
-		
-	}
-	
-	public void reset() {
-		deck.clear();//throw away current deck
-		emptyHand();//throw away current hand
-		//refill a new deck, loop by # of decks
+		this.deck = new ArrayList<Card>(); 
+		this.hand = new ArrayList<Card>();
 		int numDecks = 3;
 		for (int i = 0; i< numDecks; i++) {//add one deck per loop
 			CardSuit Suit = CardSuit.SPADES;//add cards by suit
@@ -23,6 +18,12 @@ public class Dealer {
 			Suit = CardSuit.DIAMONDS;
 			addSuit(Suit);
 		}
+		shuffle(); 
+	}
+	
+	public void reset() {
+		deck.clear();//throw away current deck
+		emptyHand();//throw away current hand
 	}
 	
 	public void shuffle() {
@@ -100,5 +101,4 @@ public class Dealer {
 		card = new Card(10, str.toString(), Suit);
 		deck.add(card);
 	}
-	
 }
