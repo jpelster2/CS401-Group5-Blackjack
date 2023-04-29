@@ -23,9 +23,8 @@ public class Dealer {
 			Suit = CardSuit.DIAMONDS;
 			addSuit(Suit);
 		}
-
-		
 	}
+	
 	public void shuffle() {
 		//shuffle remaining cards
 		int x = 0;
