@@ -83,7 +83,7 @@ public class Dealer {
 		str.setLength(0);//clear str
 		str.append("Ace of ");
 		str.append(Suit.toString());
-		card = new Card(1, str.toString(), Suit);
+		card = new Card(11, str.toString(), Suit);
 		deck.add(card);
 		str.setLength(0);//clear str
 		str.append("Jack of ");
