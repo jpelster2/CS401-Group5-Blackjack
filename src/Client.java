@@ -2,12 +2,12 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
-
 public class Client {
 	private static Socket socket;
 	private static ObjectInputStream objectInputStream;
 	private static ObjectOutputStream objectOutputStream;
 	private static boolean inLobbyMenu = true;
+	private static String loginUsername;
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String serverAddress = JOptionPane.showInputDialog("Enter the address you want to connect to");
@@ -21,7 +21,7 @@ public class Client {
 		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 		objectInputStream = new ObjectInputStream(socket.getInputStream());
 		
-		String loginUsername = JOptionPane.showInputDialog("Login with username or cancel to close");
+		loginUsername = JOptionPane.showInputDialog("Login with username or cancel to close");
 		Message loginMessage = new Message(MessageType.LOGIN, "login",loginUsername,0); 
 		objectOutputStream.writeObject(loginMessage); //send to server login request with username
 		
@@ -248,8 +248,7 @@ public class Client {
 		
 			standMessage = (Message)objectInputStream.readObject();//read changed message
 		
-			return standMessage.getText(); //the message that stand has will need to be the dealers full deck after and hits it makes 
-			//for example: 10 of hearts, queen(10) of spades, 1 of diamonds
+			return standMessage.getText(); //username of next player
 		
 		}catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
@@ -278,13 +277,89 @@ public class Client {
 		
 	}
 	
-	//function for whos turn is it
-	//player 1 starts. all other players are greyed out buttons
-	//loop until the players turn then allow player to play
-	//once stand is hit next players turn. wait for dealers turn to get full dealers hand
-	//loop breaks on clients turn is active or 
+	public static String doWhosTurn() {
+		Message gameMessage = new Message(MessageType.GAME, "status" , loginUsername, 0);
+		try{
+			
+			while(!gameMessage.getAction().equals("go")) { //while its not current players turn
+				
+				try {
+					Thread.sleep(200);	//sleep for 200ms before sending message
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				objectOutputStream.writeObject(gameMessage); //send to server status request
+				
+				gameMessage = (Message)objectInputStream.readObject();//read changed message
+				
+				if(gameMessage.getAction().equals("dealer")) {	//when its dealers action return the text of the all dealers card
+					return gameMessage.getText();
+				}
+				if(gameMessage.getText().contains("username: ")) { //when a players status message is sent it will update the status label in gui
+					return gameMessage.getText();
+				}
+			}
+		
+			return gameMessage.getAction(); //when the go action is called for player return the text will be the players username and will add that to status label in gui
+
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
 	
+	public static void doWinnings() {
+		
+		try{
+			Message gameMessage = new Message(MessageType.GAME, "winnings" , loginUsername, 0);
+			objectOutputStream.writeObject(gameMessage); //send to server logout request
+		
+			gameMessage = (Message)objectInputStream.readObject();//read changed message
+			
+			if(!gameMessage.getText().equals("0")) {
+				Message balanceMessage = new Message(MessageType.BALANCE, "add",gameMessage.getText(),0); //sends message that has a balance type with add action and amount to add
+				objectOutputStream.writeObject(balanceMessage); //send to server logout request
+			
+				balanceMessage = (Message)objectInputStream.readObject();//read changed message
+				JOptionPane.showMessageDialog(null, "User Balance updated to: "+balanceMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "You lose :(","Balance Update", JOptionPane.INFORMATION_MESSAGE);
+			}
+		
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
 	
+	public static void dobet(String betBalance) {
+		
+		try{
+			Message gameMessage = new Message(MessageType.GAME, "bet" , betBalance, 0);
+			objectOutputStream.writeObject(gameMessage); //send to server bet request
+		
+			gameMessage = (Message)objectInputStream.readObject();//read changed message
+			if(gameMessage.getText().equals("success")) {
+				JOptionPane.showMessageDialog(null, "Bet placed","Bet Update", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "You are too broke to do that","Bet Update", JOptionPane.ERROR_MESSAGE);
+			}
+		
+		}catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
 	
 }
 	
