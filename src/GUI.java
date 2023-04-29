@@ -16,11 +16,11 @@ public class GUI {
     private JButton leaveGameButton;
 
 
-    public GUI(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
-        initialize(objectOutputStream, objectInputStream);
+    public GUI() {
+        initialize();
     }
 
-    private void initialize(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+    private void initialize() {
     	frame = new JFrame("Blackjack Game");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
@@ -48,7 +48,7 @@ public class GUI {
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	String hit = Client.doHit(objectOutputStream, objectInputStream);
+            	String hit = Client.doHit();
             	statusLabel.setText(statusLabel.getText()+" Player has hit");
             	playerHandLabel.setText(playerHandLabel.getText()+" "+hit);
             }
@@ -63,7 +63,7 @@ public class GUI {
                 
                 statusLabel.setText(statusLabel.getText()+" Player has passed their turn");
                 
-                String stand = Client.doStand(objectOutputStream, objectInputStream);
+                String stand = Client.doStand();
                 
                 statusLabel.setText(statusLabel.getText()+" Dealer has taken its turn");
                 dealerHandLabel.setText(dealerHandLabel.getText()+" "+stand);
@@ -73,9 +73,10 @@ public class GUI {
         leaveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	Client.doLeaveGame();
             	statusLabel.setText(statusLabel.getText()+" Player Left");
             	frame.dispose();
-                Client.lobby(null, null);
+                Client.lobby();
             }
         });
         frame.setVisible(true);

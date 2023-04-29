@@ -165,6 +165,7 @@ public class Server {
 							tableNum = -1;
 							status = ClientStatus.IN_LOBBY;
 							reply = new Message(MessageType.LOBBY, "success", null, 0);
+							System.out.println("User \""+username+"\" left their game table.");
 						}
 						break;
 					}
@@ -195,6 +196,8 @@ public class Server {
 			}
 		}
 		
+		// This should be done by the Dealer in the Game class, not here.
+		@Deprecated
 		private Card generateRandomCard() {
 			Random rand = new Random();
 			

@@ -4,17 +4,22 @@ import javax.swing.*;
 
 
 public class Client {
+	private static Socket socket;
+	private static ObjectInputStream objectInputStream;
+	private static ObjectOutputStream objectOutputStream;
+	private static boolean inLobbyMenu = true;
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String serverAddress = JOptionPane.showInputDialog("Enter the address you want to connect to");
 		int serverPort = Integer.parseInt(JOptionPane.showInputDialog("Enter the port you want to connect to"));
 		
 		// Connect to the ServerSocket at host:port
-		Socket socket = new Socket(serverAddress, serverPort);
+		socket = new Socket(serverAddress, serverPort);
 		JOptionPane.showMessageDialog(null, "Connected to server: "+serverAddress+" on port: "+serverPort, "Connection Status", JOptionPane.INFORMATION_MESSAGE);
 		
 		// Create object output stream from the output stream to send an object through it
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-		ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+		objectInputStream = new ObjectInputStream(socket.getInputStream());
 		
 		String loginUsername = JOptionPane.showInputDialog("Login with username or cancel to close");
 		Message loginMessage = new Message(MessageType.LOGIN, "login",loginUsername,0); 
@@ -28,16 +33,23 @@ public class Client {
 			JOptionPane.showMessageDialog(null, "Login failed","Login Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		lobby(objectOutputStream, objectInputStream);
-		
-		objectInputStream.close();
-		objectOutputStream.close();
-		socket.close();
+		lobby();
+	}
+	
+	public static void exit() {
+		try {
+			objectInputStream.close();
+			objectOutputStream.close();
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.exit(0);
 	}
 	
-	public static void lobby(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
-		
+	public static void lobby() {
+		inLobbyMenu = true;
 		int choice;
 		String[] commands = {"Join Game 1","Join Game 2","Join Game 3","Join game 4","Get Balance","Add Balance","Remove Balance","Logout"};
 		do {
@@ -45,21 +57,21 @@ public class Client {
 			choice = JOptionPane.showOptionDialog(null,"Select a command", "Blackjack Lobby", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, commands,commands[commands.length - 1]);
 			
 			switch (choice) {
-		 	case 0: doJoinGame1(objectOutputStream, objectInputStream); break;
-		 	case 1: doJoinGame2(objectOutputStream, objectInputStream); break;
-		 	case 2: doJoinGame3(objectOutputStream, objectInputStream); break;
-		 	case 3: doJoinGame4(objectOutputStream, objectInputStream); break;
-		 	case 4: doGetBalance(objectOutputStream, objectInputStream); break;
-		 	case 5: doAddFunds(objectOutputStream, objectInputStream); break;
-		 	case 6: doRemoveFunds(objectOutputStream, objectInputStream); break;
-		 	case 7: doLogout(objectOutputStream, objectInputStream); break;
+		 	case 0: doJoinGame1(); break;
+		 	case 1: doJoinGame2(); break;
+		 	case 2: doJoinGame3(); break;
+		 	case 3: doJoinGame4(); break;
+		 	case 4: doGetBalance(); break;
+		 	case 5: doAddFunds(); break;
+		 	case 6: doRemoveFunds(); break;
+		 	case 7: doLogout(); break;
 		 	default:  // do nothing
 		 }
-		}while(choice != commands.length-1);
+		}while(choice != commands.length-1 && inLobbyMenu);
 		
 	}
 	
-	public static void doJoinGame1(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doJoinGame1() {
 		
 		try {
 			Message joinGameMessage = new Message(MessageType.LOBBY, "join","1",0); 
@@ -68,7 +80,8 @@ public class Client {
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
 			JOptionPane.showMessageDialog(null, "Joined Game 1 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
-			new GUI(objectOutputStream, objectInputStream);
+			inLobbyMenu = false;
+			new GUI();
 			
 		
 		} catch (ClassNotFoundException | IOException e) {
@@ -77,7 +90,7 @@ public class Client {
 		} 
 	}
 	
-	public static void doJoinGame2(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doJoinGame2() {
 		
 		try {
 			Message joinGameMessage = new Message(MessageType.LOBBY, "join","2",0); 
@@ -86,7 +99,8 @@ public class Client {
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
 			JOptionPane.showMessageDialog(null, "Joined Game 2 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
-			new GUI(objectOutputStream, objectInputStream);
+			inLobbyMenu = false;
+			new GUI();
 			
 		
 		} catch (ClassNotFoundException | IOException e) {
@@ -95,7 +109,7 @@ public class Client {
 		} 
 	}
 
-	public static void doJoinGame3(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doJoinGame3() {
 		
 		try {
 			Message joinGameMessage = new Message(MessageType.LOBBY, "join","3",0); 
@@ -104,7 +118,8 @@ public class Client {
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
 			JOptionPane.showMessageDialog(null, "Joined Game 3 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
-			new GUI(objectOutputStream, objectInputStream);
+			inLobbyMenu = false;
+			new GUI();
 			
 		
 		} catch (ClassNotFoundException | IOException e) {
@@ -113,7 +128,7 @@ public class Client {
 		} 
 	}
 	
-	public static void doJoinGame4(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doJoinGame4() {
 		
 		try {
 			Message joinGameMessage = new Message(MessageType.LOBBY, "join","4",0); 
@@ -122,7 +137,8 @@ public class Client {
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
 			JOptionPane.showMessageDialog(null, "Joined Game 4 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
-			new GUI(objectOutputStream, objectInputStream);
+			inLobbyMenu = false;
+			new GUI();
 			
 		
 		} catch (ClassNotFoundException | IOException e) {
@@ -131,7 +147,23 @@ public class Client {
 		} 
 	}
 	
-	public static void doAddFunds(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doLeaveGame() {
+		
+		try {
+			Message leaveGameMessage = new Message(MessageType.LOBBY, "leave","4",0); 
+			objectOutputStream.writeObject(leaveGameMessage); //send to server join game request
+		
+			leaveGameMessage = (Message)objectInputStream.readObject(); //read changed message
+			JOptionPane.showMessageDialog(null, "Left the Game ","Leave Successful", JOptionPane.INFORMATION_MESSAGE);
+			
+		
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	public static void doAddFunds() {
 		
 		try {
 			String addBalance = JOptionPane.showInputDialog("Enter the amount to add: ");
@@ -147,7 +179,7 @@ public class Client {
 		} 
 	}
 	
-	public static void doRemoveFunds(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doRemoveFunds() {
 		
 		try {
 			String removeBalance = JOptionPane.showInputDialog("Enter the amount to remove: ");
@@ -168,7 +200,7 @@ public class Client {
 		} 
 	}
 	
-	public static void doGetBalance(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doGetBalance() {
 		
 		try {
 			Message balanceMessage = new Message(MessageType.BALANCE, "request",null,0);
@@ -183,7 +215,7 @@ public class Client {
 		} 
 	}
 	
-	public static void doLogout(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static void doLogout() {
 		
 		try {
 			Message logoutMessage = new Message(MessageType.LOGIN, "logout",null,0);
@@ -199,9 +231,11 @@ public class Client {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		} 
+		
+		exit();
 	}
 	
-	public static String doHit(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static String doHit() {
 		
 		try{
 			Message hitMessage = new Message(MessageType.GAME, "hit" , null, 0);
@@ -219,7 +253,7 @@ public class Client {
 		
 	}
 	
-	public static String doStand(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static String doStand() {
 		
 		try{
 			Message standMessage = new Message(MessageType.GAME, "stand" , null, 0);
@@ -238,7 +272,7 @@ public class Client {
 		
 	}
 	
-	public static String doGameState(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public static String doGameState() {
 		
 		try{
 			Message gameMessage = new Message(MessageType.GAME, "status" , null, 0);
