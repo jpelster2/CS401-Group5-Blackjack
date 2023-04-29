@@ -28,6 +28,17 @@ public class Dealer {
 	}
 	public void shuffle() {
 		//shuffle remaining cards
+		int x = 0;
+		int y = 0;
+		Random rand = new Random();
+		Card temp = new Card();
+		for (int i = 0; i < 50; i++) {//assume deck size is 3 normal decks of 52, 156 total, 50 random swaps in deck
+			x = rand.nextInt(156);
+			y = rand.nextInt(156);
+			temp = deck.get(x);
+			deck.set(x, deck.get(y));
+			deck.set(y, temp);
+		}
 	}
 	public Card dealCard() {
 		Card card = new Card(0, "placeholder", CardSuit.CLUBS);//should eventually draw from deck

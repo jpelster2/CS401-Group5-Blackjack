@@ -4,6 +4,9 @@ public class Card {
 	private String name;
 	private CardSuit suit;
 	
+	public Card() {
+
+	}
 	public Card(int value, String name, CardSuit suit) {
 		this.value = value;
 		this.name = name;
