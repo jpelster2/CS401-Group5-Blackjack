@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class GUI {
 
@@ -14,6 +12,8 @@ public class GUI {
     private JButton hitButton;
     private JButton standButton;
     private JButton leaveGameButton;
+    private JButton startGameButton;
+    private JButton betGameButton;
 
 
     public GUI() {
@@ -34,6 +34,8 @@ public class GUI {
         hitButton = new JButton("Hit");
         standButton = new JButton("Stand");
         leaveGameButton = new JButton("Leave Game");
+        startGameButton = new JButton("Start Game");
+        betGameButton = new JButton("Bet Amount");
 
         mainPanel.add(playerHandLabel, BorderLayout.NORTH);
         mainPanel.add(dealerHandLabel, BorderLayout.CENTER);
@@ -44,13 +46,19 @@ public class GUI {
         buttonPanel.add(hitButton);
         buttonPanel.add(standButton);
         buttonPanel.add(leaveGameButton);
+        buttonPanel.add(startGameButton);
+        buttonPanel.add(betGameButton);
 
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	String hit = Client.doHit();
-            	statusLabel.setText(statusLabel.getText()+" Player has hit");
+            	statusLabel.setText(statusLabel.getText()+" Player has hit. ");
             	playerHandLabel.setText(playerHandLabel.getText()+" "+hit);
+            	if(hit.equals("player busted")) {
+            		Client.doStand();
+            		statusLabel.setText(statusLabel.getText()+" Player has passed their turn. ");
+            	}
             }
         });
 
@@ -60,13 +68,12 @@ public class GUI {
             	//disable buttons until the dealers turn comes and the round is over. 
             	hitButton.setEnabled(false);
                 standButton.setEnabled(false);
-                
-                statusLabel.setText(statusLabel.getText()+" Player has passed their turn");
+                startGameButton.setEnabled(false);
                 
                 String stand = Client.doStand();
                 
-                statusLabel.setText(statusLabel.getText()+" Dealer has taken its turn");
-                dealerHandLabel.setText(dealerHandLabel.getText()+" "+stand);
+                statusLabel.setText(statusLabel.getText()+ stand + " is up next. ");
+
             }
         });
         
@@ -79,6 +86,46 @@ public class GUI {
                 Client.lobby();
             }
         });
+        
+        startGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	String turn = null;
+            	
+            	turn = Client.doGameState();
+            	dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
+            	statusLabel.setText(statusLabel.getText()+ turn +" The game has begun! ");
+            	
+            	hitButton.setEnabled(false);
+                standButton.setEnabled(false);
+                startGameButton.setEnabled(false);
+                betGameButton.setEnabled(false);
+                
+            	while(!turn.equals("go")) {
+            		turn = Client.doWhosTurn();
+            		statusLabel.setText(statusLabel.getText()+ turn +" Player's turn. ");
+            		if(turn.equals("dealer")) {
+            			statusLabel.setText(statusLabel.getText()+ turn +" Dealer's turn. ");
+            			dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
+            			Client.doWinnings();
+            		}
+            	}
+            	statusLabel.setText(statusLabel.getText()+ "Your turn. ");
+            }
+        });
+        
+        betGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String betBalance = JOptionPane.showInputDialog("Enter the amount to bet: ");
+                Client.dobet(betBalance);
+                
+                statusLabel.setText(statusLabel.getText()+"Player bet: " + betBalance);
+
+            }
+        });
+        
         frame.setVisible(true);
     }
 
