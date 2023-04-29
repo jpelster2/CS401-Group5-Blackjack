@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Random;
 
 // This class based on, but not copied verbatim from,
 // the "Object Over Socket Networking" and "Threaded Networking" examples,
@@ -99,9 +100,7 @@ public class Server {
 							reply = new Message(MessageType.LOGIN, "login", "success", 0);
 							status = ClientStatus.IN_LOBBY;
 							username = msg.getText();
-							player = new Player();
-							player.setUsername(username);
-							player.setBalance(balance);
+							player = new Player(username, "", balance);
 							player.setId(username);
 							System.out.println("User \""+username+"\" logged in.");
 						} else if (action.equals("logout")) {
@@ -133,6 +132,17 @@ public class Server {
 						}
 						break;
 					case GAME:
+						if (action.equals("hit")) {
+							// Randomly generate a new card (assume we have a deck size that's infinite, no card-counting!)
+							Card newCard = generateRandomCard();
+							// TODO: Add card to the player's hand.
+							reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
+							System.out.println("Player \""+username+"\" hit, gaining new card "+newCard.getName());
+						} else if (action.equals("stay")) {
+							// Increment turn number
+							gameList.get(tableNum).setTurn(gameList.get(tableNum).getTurn() + 1);
+							reply = new Message(MessageType.GAME, "stay", null, 0);
+						}
 						break;
 					case LOBBY:
 						// Join action
@@ -183,6 +193,47 @@ public class Server {
 					ex.printStackTrace();
 				}
 			}
+		}
+		
+		private Card generateRandomCard() {
+			Random rand = new Random();
+			
+			String name = null;
+			
+			int suitIndex = rand.nextInt(1,5);
+			CardSuit suit = null;
+			String suitName = null;
+			switch (suitIndex) {
+			case 1:
+				suit = CardSuit.CLUBS;
+				suitName = "Clubs";
+				break;
+			case 2:
+				suit = CardSuit.DIAMONDS;
+				suitName = "Diamonds";
+				break;
+			case 3:
+				suit = CardSuit.HEARTS;
+				suitName = "Hearts";
+				break;
+			case 4:
+				suit = CardSuit.SPADES;
+				suitName = "Spades";
+				break;
+			}
+			
+			int value = rand.nextInt(1,14);	// 1 through 10, jack, queen, king are also worth 10
+			if (value > 10) {
+				String[] faceCards = {"Jack", "Queen", "King"};
+				name = faceCards[value - 10];
+				value = 10;	// Face cards are really only worth 10
+			} else {
+				name = Integer.toString(value);
+			}
+			name += " of " + suitName;
+			
+			Card newCard = new Card(value, name, suit);
+			return newCard;
 		}
 	}
 }

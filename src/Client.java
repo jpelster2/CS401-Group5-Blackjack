@@ -224,7 +224,7 @@ public class Client {
 	public static String doStand(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try{
-			Message standMessage = new Message(MessageType.GAME, "hit" , null, 0);
+			Message standMessage = new Message(MessageType.GAME, "stand" , null, 0);
 			objectOutputStream.writeObject(standMessage); //send to server logout request
 		
 			standMessage = (Message)objectInputStream.readObject();//read changed message
@@ -243,7 +243,7 @@ public class Client {
 	public static String doGameState(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		
 		try{
-			Message gameMessage = new Message(MessageType.GAME, "hit" , null, 0);
+			Message gameMessage = new Message(MessageType.GAME, "status" , null, 0);
 			objectOutputStream.writeObject(gameMessage); //send to server logout request
 		
 			gameMessage = (Message)objectInputStream.readObject();//read changed message
