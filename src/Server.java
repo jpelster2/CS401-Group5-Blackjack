@@ -138,10 +138,10 @@ public class Server {
 							// TODO: Add card to the player's hand.
 							reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
 							System.out.println("Player \""+username+"\" hit, gaining new card "+newCard.getName());
-						} else if (action.equals("stay")) {
+						} else if (action.equals("stand")) {
 							// Increment turn number
 							gameList.get(tableNum).setTurn(gameList.get(tableNum).getTurn() + 1);
-							reply = new Message(MessageType.GAME, "stay", null, 0);
+							reply = new Message(MessageType.GAME, "stand", null, 0);
 						}
 						break;
 					case LOBBY:

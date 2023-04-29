@@ -36,18 +36,6 @@ public class Client {
 		lobby();
 	}
 	
-	public static void exit() {
-		try {
-			objectInputStream.close();
-			objectOutputStream.close();
-			socket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.exit(0);
-	}
-	
 	public static void lobby() {
 		inLobbyMenu = true;
 		int choice;
@@ -226,13 +214,12 @@ public class Client {
 		
 			objectInputStream.close();
 			objectOutputStream.close();
+			socket.close();
 			System.exit(0);
 		} catch (ClassNotFoundException | IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-		} 
-		
-		exit();
+		}
 	}
 	
 	public static String doHit() {
