@@ -22,7 +22,7 @@ public class Dealer {
 	}
 	
 	public void reset() {
-		deck.clear();//throw away current deck
+		this.deck.clear();//throw away current deck
 		emptyHand();//throw away current hand
 	}
 	
@@ -33,21 +33,21 @@ public class Dealer {
 		Random rand = new Random();
 		Card temp = new Card();
 		for (int i = 0; i < 50; i++) {//assume deck size is 3 normal decks of 52, 156 total, 50 random swaps in deck
-			x = rand.nextInt(deck.size());//random index 0-155, now dynamic for cards to be drawn
-			y = rand.nextInt(deck.size());
-			temp = deck.get(x);
-			deck.set(x, deck.get(y));
-			deck.set(y, temp);
+			x = rand.nextInt(this.deck.size());//random index 0-155, now dynamic for cards to be drawn
+			y = rand.nextInt(this.deck.size());
+			temp = this.deck.get(x);
+			this.deck.set(x, deck.get(y));
+			this.deck.set(y, temp);
 		}
 	}
 	public Card dealCard() {
 		Card card = new Card();
-		card = deck.get((0));//get card value
-		deck.remove(0);//remove card from top of deck
+		card = this.deck.get((0));//get card value
+		this.deck.remove(0);//remove card from top of deck
 		return card;
 	}
 	public int getRemaining() {//deck size
-		return deck.size();
+		return this.deck.size();
 	}
 	public int handTotal() {
 		int total = 0;
@@ -58,9 +58,9 @@ public class Dealer {
 	}
 	public void drawCard() {
 		Card card = new Card();
-		card = deck.get((0));//get card value
-		deck.remove(0);//remove card from top of deck
-		hand.add(card);
+		card = this.deck.get((0));//get card value
+		this.deck.remove(0);//remove card from top of deck
+		this.hand.add(card);
 	}
 	public void emptyHand() {
 		//discard hand
@@ -77,29 +77,29 @@ public class Dealer {
 			str.append(" of ");
 			str.append(Suit.toString());
 			card = new Card(i, str.toString(), Suit);
-			deck.add(card);
+			this.deck.add(card);
 		}
 		//makes face cards and aces
 		str.setLength(0);//clear str
 		str.append("Ace of ");
 		str.append(Suit.toString());
 		card = new Card(11, str.toString(), Suit);
-		deck.add(card);
+		this.deck.add(card);
 		str.setLength(0);//clear str
 		str.append("Jack of ");
 		str.append(Suit.toString());
 		card = new Card(10, str.toString(), Suit);
-		deck.add(card);
+		this.deck.add(card);
 		str.setLength(0);//clear str
 		str.append("Queen of ");
 		str.append(Suit.toString());
 		card = new Card(10, str.toString(), Suit);
-		deck.add(card);
+		this.deck.add(card);
 		str.setLength(0);//clear str
 		str.append("King of ");
 		str.append(Suit.toString());
 		card = new Card(10, str.toString(), Suit);
-		deck.add(card);
+		this.deck.add(card);
 	}
 	public ArrayList<Card> getHand(){
 		return hand;
