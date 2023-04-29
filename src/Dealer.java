@@ -16,7 +16,7 @@ public class Dealer {
 		//shuffle remaining cards
 	}
 	public Card dealCard() {
-		Card card = new Card(0, "placeholder", CardSuit.CLOVERS);//should eventually draw from deck
+		Card card = new Card(0, "placeholder", CardSuit.CLUBS);//should eventually draw from deck
 		return card;
 	}
 	public int getRemaining() {//deck size
