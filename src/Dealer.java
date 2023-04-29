@@ -33,15 +33,17 @@ public class Dealer {
 		Random rand = new Random();
 		Card temp = new Card();
 		for (int i = 0; i < 50; i++) {//assume deck size is 3 normal decks of 52, 156 total, 50 random swaps in deck
-			x = rand.nextInt(156);//random index 0-155
-			y = rand.nextInt(156);
+			x = rand.nextInt(deck.size());//random index 0-155, now dynamic for cards to be drawn
+			y = rand.nextInt(deck.size());
 			temp = deck.get(x);
 			deck.set(x, deck.get(y));
 			deck.set(y, temp);
 		}
 	}
 	public Card dealCard() {
-		Card card = new Card(0, "placeholder", CardSuit.CLUBS);//should eventually draw from deck
+		Card card = new Card();
+		card = deck.get((0));//get card value
+		deck.remove(0);//remove card from top of deck
 		return card;
 	}
 	public int getRemaining() {//deck size
@@ -56,7 +58,9 @@ public class Dealer {
 		return total;
 	}
 	public void drawCard() {
-		Card card = new Card(0, "placeholder", CardSuit.CLUBS);//should eventually draw from deck
+		Card card = new Card();
+		card = deck.get((0));//get card value
+		deck.remove(0);//remove card from top of deck
 		hand.add(card);
 	}
 	public void emptyHand() {
@@ -66,7 +70,7 @@ public class Dealer {
 	
 	private void addSuit(CardSuit Suit) {//helper
 		//makes numbered cards 2-10
-		Card card = new Card(0, "placeholder", Suit);
+		Card card = new Card();
 		StringBuilder str = new StringBuilder();
 		for (int i = 2; i < 11; i++) {
 			str.setLength(0);//clear str
