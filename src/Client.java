@@ -278,6 +278,13 @@ public class Client {
 		
 	}
 	
+	//function for whos turn is it
+	//player 1 starts. all other players are greyed out buttons
+	//loop until the players turn then allow player to play
+	//once stand is hit next players turn. wait for dealers turn to get full dealers hand
+	//loop breaks on clients turn is active or 
+	
+	
 	
 }
 	
