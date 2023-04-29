@@ -46,8 +46,7 @@ public class Dealer {
 		return card;
 	}
 	public int getRemaining() {//deck size
-		int total = deck.size();
-		return total;
+		return deck.size();
 	}
 	public int handTotal() {
 		int total = 0;
