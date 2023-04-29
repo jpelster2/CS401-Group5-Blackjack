@@ -7,11 +7,9 @@ import java.io.ObjectOutputStream;
 
 public class GUI {
 
-    private JFrame frame;
-    private JPanel panel;
+	private JFrame frame;
     private JLabel playerHandLabel;
     private JLabel dealerHandLabel;
-    private JLabel deckLabel;
     private JLabel statusLabel;
     private JButton hitButton;
     private JButton standButton;
@@ -23,37 +21,30 @@ public class GUI {
     }
 
     private void initialize(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
-        frame = new JFrame("Blackjack");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame = new JFrame("Blackjack Game");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
 
-        panel = new JPanel();
-        frame.add(panel);
-        panel.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        frame.setContentPane(mainPanel);
 
-        JPanel topPanel = new JPanel();
-        panel.add(topPanel, BorderLayout.NORTH);
-        topPanel.setLayout(new GridLayout(2, 1));
-
-        dealerHandLabel = new JLabel("Dealer's hand: ");
-        topPanel.add(dealerHandLabel);
-        String dealerHand = Client.doGameState(objectOutputStream, objectInputStream);
-        dealerHandLabel.setText(dealerHandLabel.getText()+" "+dealerHand);
-        playerHandLabel = new JLabel("Player's hand: ");
-        topPanel.add(playerHandLabel);
-
-        deckLabel = new JLabel("Deck: ");
-        panel.add(deckLabel, BorderLayout.CENTER);
-
+        playerHandLabel = new JLabel("Player Hand: ");
+        dealerHandLabel = new JLabel("Dealer Hand: ");
         statusLabel = new JLabel("Status: ");
-        panel.add(statusLabel, BorderLayout.SOUTH);
+        hitButton = new JButton("Hit");
+        standButton = new JButton("Stand");
+        leaveGameButton = new JButton("Leave Game");
+
+        mainPanel.add(playerHandLabel, BorderLayout.NORTH);
+        mainPanel.add(dealerHandLabel, BorderLayout.CENTER);
+        mainPanel.add(statusLabel, BorderLayout.SOUTH);
 
         JPanel buttonPanel = new JPanel();
-        panel.add(buttonPanel, BorderLayout.EAST);
-        buttonPanel.setLayout(new GridLayout(2, 1));
-
-        hitButton = new JButton("Hit");
+        mainPanel.add(buttonPanel, BorderLayout.EAST);
         buttonPanel.add(hitButton);
+        buttonPanel.add(standButton);
+        buttonPanel.add(leaveGameButton);
+
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,8 +54,6 @@ public class GUI {
             }
         });
 
-        standButton = new JButton("Stand");
-        buttonPanel.add(standButton);
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,8 +70,6 @@ public class GUI {
             }
         });
         
-        leaveGameButton = new JButton("Leave Game");
-        buttonPanel.add(leaveGameButton);
         leaveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,6 +78,7 @@ public class GUI {
                 Client.lobby(null, null);
             }
         });
-        
+        frame.setVisible(true);
     }
+
 }
