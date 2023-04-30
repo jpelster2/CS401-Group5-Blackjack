@@ -134,6 +134,8 @@ public class Server {
 					case GAME:
 						Game thisGame = gameList.get(tableNum);
 						if (action.equals("hit")) {
+							// Deal this player a card.
+							thisGame.dealCard(player);
 							// Get the last card in their hand, which should be the most recently-added.
 							Card newCard = player.getHand().get(player.getHand().size() - 1);
 							reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
@@ -141,31 +143,51 @@ public class Server {
 						} else if (action.equals("stand")) {
 							// Increment turn number
 							thisGame.nextTurn();
-							String nextPlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
-							reply = new Message(MessageType.GAME, "stand", nextPlayerName, 0);
-						} else if (action.equals("status")) {
-							if (text.equals("start")) {
-								thisGame.beginGame();
-								String dealersCard = thisGame.getDealer().getHand().get(0).getName();
-								reply = new Message(MessageType.GAME, "status", dealersCard, 0);
+							// Check whose turn it is now and tell the client.
+							if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
+								//Build a string that is made of all the cards in their hand, separated by commas.
+								ArrayList<Card> hand = thisGame.getDealer().getHand();
+								StringBuilder sb = new StringBuilder();
+								for (int i = 0; i < hand.size(); ++i) {
+									Card c = hand.get(i);
+									sb.append(c.getName());
+									if ((i + 1) < hand.size()) {
+										sb.append(", ");
+									}
+								}
+								reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+							// Otherwise, check if it's this client's turn, or someone else's.
 							} else {
 								String activePlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
-								if (activePlayerName.equals(text)) {
-									reply = new Message(MessageType.GAME, "go", "", 0);
-								} else if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
-									//Build a string that is made of all the cards in their hand, separated by commas.
-									ArrayList<Card> hand = thisGame.getDealer().getHand();
-									StringBuilder sb = new StringBuilder();
-									for (int i = 0; i < hand.size(); ++i) {
-										Card c = hand.get(i);
-										sb.append(c.getName());
-										if ((i + 1) < hand.size()) {
-											sb.append(", ");
-										}
+								reply = new Message(MessageType.GAME, "stand", activePlayerName, 0);
+							}
+						} else if (action.equals("start")) {
+							String dealersCard = thisGame.getDealer().getHand().get(0).getName();
+							reply = new Message(MessageType.GAME, "status", dealersCard, 0);
+						} else if (action.equals("status")) {
+							// If all the players have gone, it's the dealer's turn, tell the clients what
+							// the dealer's final hand is.
+							if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
+								//Build a string that is made of all the cards in their hand, separated by commas.
+								ArrayList<Card> hand = thisGame.getDealer().getHand();
+								StringBuilder sb = new StringBuilder();
+								for (int i = 0; i < hand.size(); ++i) {
+									Card c = hand.get(i);
+									sb.append(c.getName());
+									if ((i + 1) < hand.size()) {
+										sb.append(", ");
 									}
-									reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+								}
+								reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+							// Otherwise, check if it's this client's turn, or someone else's.
+							} else {
+								String activePlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
+								if (activePlayerName.equals(username)) {
+									// If it's our turn, tell that client to allow hitting or staying.
+									reply = new Message(MessageType.GAME, "go", "", 0);
 								} else {
-									reply = new Message(MessageType.GAME, "status", username, 0);
+									// Otherwise, just tell them whose turn it is.
+									reply = new Message(MessageType.GAME, "status", activePlayerName, 0);
 								}
 							}
 						} else if (action.equals("bet")) {
@@ -173,6 +195,7 @@ public class Server {
 							if (balance - amount < 0) {
 								reply = new Message(MessageType.GAME, "bet", "too_broke", 0);
 							} else {
+								player.setCurrentBet(amount);
 								reply = new Message(MessageType.GAME, "bet", "success", 0);
 							}
 						}
