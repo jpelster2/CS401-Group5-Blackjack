@@ -10,17 +10,12 @@ public class Game {
 	private ArrayList<Player> gameLobby;
 	private Dealer dealer; 
 	
-	public Game(float houseBalance, ArrayList<Player> gameLobby) {
-		setActivity(true);
-		setHouseBalance(houseBalance); 
-		setGameLobby(gameLobby); 
-		Dealer dealer = new Dealer(); 
-		setDealer(dealer);
-	}
 	public Game() {
 		setActivity(true);
+		setHouseBalance(100000000);
 		Dealer dealer = new Dealer(); 
 		setDealer(dealer);
+		gameLobby = new ArrayList<Player>();
 	}
 	 public void setId(int id) {
 		this.id = id; 
@@ -100,7 +95,8 @@ public class Game {
 			 System.out.println( gameLobby.get(i).getUsername() +  " enter the amount of the bet you would like to place: "); 
 			 float betAmount = in.nextFloat();
 			 gameLobby.get(i).setCurrentBet(betAmount); 
-			 totalBets+=betAmount; 
+			 totalBets+=betAmount;
+			 in.close();
 		}
 		 setBetPool(totalBets); 
 		 System.out.println(getBetPool());
@@ -161,7 +157,7 @@ public class Game {
 	 public void beginGame(){
 		 boolean playGame = true; 
 		 Scanner in = new Scanner(System.in);
-		 collectPool(); 
+		 //collectPool(); 
 		 dealer.drawCard();
 		 System.out.println("Dealer's Card: " + dealer.getHand().get(0).getName());
 		 while(playGame) {

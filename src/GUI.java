@@ -92,7 +92,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
             	String turn = null;
             	
-            	turn = Client.doGameState();
+            	turn = Client.doGameStart();
             	dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
             	statusLabel.setText(statusLabel.getText()+ turn +" The game has begun! ");
             	
@@ -112,6 +112,10 @@ public class GUI {
             		}
             	}
             	if (turn.equals("go")) {
+            		hitButton.setEnabled(true);
+                    standButton.setEnabled(true);
+                    startGameButton.setEnabled(true);
+                    betGameButton.setEnabled(true);
             		statusLabel.setText(statusLabel.getText()+ "Your turn. ");
             	}
             }

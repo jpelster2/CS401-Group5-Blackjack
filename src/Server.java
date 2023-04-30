@@ -144,23 +144,36 @@ public class Server {
 							String nextPlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
 							reply = new Message(MessageType.GAME, "stand", nextPlayerName, 0);
 						} else if (action.equals("status")) {
-							String activePlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
-							if (activePlayerName.equals(text)) {
-								reply = new Message(MessageType.GAME, "go", null, 0);
-							} else if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
-								//Build a string that is made of all the cards in their hand, separated by commas.
-								ArrayList<Card> hand = thisGame.getDealer().getHand();
-								StringBuilder sb = new StringBuilder();
-								for (int i = 0; i < hand.size(); ++i) {
-									Card c = hand.get(i);
-									sb.append(c.getName());
-									if ((i + 1) < hand.size()) {
-										sb.append(", ");
-									}
-								}
-								reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+							if (text.equals("start")) {
+								thisGame.beginGame();
+								String dealersCard = thisGame.getDealer().getHand().get(0).getName();
+								reply = new Message(MessageType.GAME, "status", dealersCard, 0);
 							} else {
-								reply = new Message(MessageType.GAME, "status", username, 0);
+								String activePlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
+								if (activePlayerName.equals(text)) {
+									reply = new Message(MessageType.GAME, "go", "", 0);
+								} else if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
+									//Build a string that is made of all the cards in their hand, separated by commas.
+									ArrayList<Card> hand = thisGame.getDealer().getHand();
+									StringBuilder sb = new StringBuilder();
+									for (int i = 0; i < hand.size(); ++i) {
+										Card c = hand.get(i);
+										sb.append(c.getName());
+										if ((i + 1) < hand.size()) {
+											sb.append(", ");
+										}
+									}
+									reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+								} else {
+									reply = new Message(MessageType.GAME, "status", username, 0);
+								}
+							}
+						} else if (action.equals("bet")) {
+							int amount = Integer.valueOf(text);
+							if (balance - amount < 0) {
+								reply = new Message(MessageType.GAME, "bet", "too_broke", 0);
+							} else {
+								reply = new Message(MessageType.GAME, "bet", "success", 0);
 							}
 						}
 						break;
@@ -214,49 +227,6 @@ public class Server {
 					ex.printStackTrace();
 				}
 			}
-		}
-		
-		// This should be done by the Dealer in the Game class, not here.
-		@Deprecated
-		private Card generateRandomCard() {
-			Random rand = new Random();
-			
-			String name = null;
-			
-			int suitIndex = rand.nextInt(1,5);
-			CardSuit suit = null;
-			String suitName = null;
-			switch (suitIndex) {
-			case 1:
-				suit = CardSuit.CLUBS;
-				suitName = "Clubs";
-				break;
-			case 2:
-				suit = CardSuit.DIAMONDS;
-				suitName = "Diamonds";
-				break;
-			case 3:
-				suit = CardSuit.HEARTS;
-				suitName = "Hearts";
-				break;
-			case 4:
-				suit = CardSuit.SPADES;
-				suitName = "Spades";
-				break;
-			}
-			
-			int value = rand.nextInt(1,14);	// 1 through 10, jack, queen, king are also worth 10
-			if (value > 10) {
-				String[] faceCards = {"Jack", "Queen", "King"};
-				name = faceCards[value - 10];
-				value = 10;	// Face cards are really only worth 10
-			} else {
-				name = Integer.toString(value);
-			}
-			name += " of " + suitName;
-			
-			Card newCard = new Card(value, name, suit);
-			return newCard;
 		}
 	}
 }
