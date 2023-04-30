@@ -108,9 +108,12 @@ public class GUI {
             			statusLabel.setText(statusLabel.getText()+ turn +" Dealer's turn. ");
             			dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
             			Client.doWinnings();
+            			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
             		}
             	}
-            	statusLabel.setText(statusLabel.getText()+ "Your turn. ");
+            	if (turn.equals("go")) {
+            		statusLabel.setText(statusLabel.getText()+ "Your turn. ");
+            	}
             }
         });
         

@@ -132,16 +132,36 @@ public class Server {
 						}
 						break;
 					case GAME:
+						Game thisGame = gameList.get(tableNum);
 						if (action.equals("hit")) {
-							// Randomly generate a new card (assume we have a deck size that's infinite, no card-counting!)
-							Card newCard = generateRandomCard();
-							// TODO: Add card to the player's hand.
+							// Get the last card in their hand, which should be the most recently-added.
+							Card newCard = player.getHand().get(player.getHand().size() - 1);
 							reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
 							System.out.println("Player \""+username+"\" hit, gaining new card "+newCard.getName());
 						} else if (action.equals("stand")) {
 							// Increment turn number
-							gameList.get(tableNum).setTurn(gameList.get(tableNum).getTurn() + 1);
-							reply = new Message(MessageType.GAME, "stand", null, 0);
+							thisGame.nextTurn();
+							String nextPlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
+							reply = new Message(MessageType.GAME, "stand", nextPlayerName, 0);
+						} else if (action.equals("status")) {
+							String activePlayerName = thisGame.getGameLobby().get(thisGame.getTurn()).getUsername();
+							if (activePlayerName.equals(text)) {
+								reply = new Message(MessageType.GAME, "go", null, 0);
+							} else if (thisGame.getTurn() == thisGame.getGameLobby().size()) {
+								//Build a string that is made of all the cards in their hand, separated by commas.
+								ArrayList<Card> hand = thisGame.getDealer().getHand();
+								StringBuilder sb = new StringBuilder();
+								for (int i = 0; i < hand.size(); ++i) {
+									Card c = hand.get(i);
+									sb.append(c.getName());
+									if ((i + 1) < hand.size()) {
+										sb.append(", ");
+									}
+								}
+								reply = new Message(MessageType.GAME, "dealer", sb.toString(), 0);
+							} else {
+								reply = new Message(MessageType.GAME, "status", username, 0);
+							}
 						}
 						break;
 					case LOBBY:

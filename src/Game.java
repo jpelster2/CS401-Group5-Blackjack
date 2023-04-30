@@ -166,20 +166,20 @@ public class Game {
 		 System.out.println("Dealer's Card: " + dealer.getHand().get(0).getName());
 		 while(playGame) {
 			 int turn = getTurn(); 
-			 if(turn == gameLobby.size()) {
+			 if (turn == gameLobby.size()) {
 				 dealersTurn();
 				 playGame = false; 
-			}else {
+			 } else {
 				 boolean continueRound = true; 
-				 while(continueRound) {
+				 while (continueRound) {
 					 System.out.println(gameLobby.get(turn).getUsername() + " Hit or Stand? ");
 					 String choice = in.nextLine(); 
 					 choice = choice.toUpperCase();
 					 int playerScore = gameLobby.get(turn).currentScore();
-					 if((choice.equals("HIT")) && (playerScore < 21)) {
+					 if ((choice.equals("HIT")) && (playerScore < 21)) {
 						 dealCard(gameLobby.get(turn)); 
 						 System.out.println( gameLobby.get(turn).getUsername() + " has been dealt a card."); 
-					 }else if ((choice.equals("STAND")) || playerScore >= 21) {
+					 } else if ((choice.equals("STAND")) || playerScore >= 21) {
 						 System.out.println( gameLobby.get(turn).getUsername() + " has chosen to stand and end their turn.");
 						 continueRound = false; 
 					 }

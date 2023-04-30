@@ -226,7 +226,7 @@ public class Client {
 		
 		try{
 			Message hitMessage = new Message(MessageType.GAME, "hit" , null, 0);
-			objectOutputStream.writeObject(hitMessage); //send to server logout request
+			objectOutputStream.writeObject(hitMessage);
 		
 			hitMessage = (Message)objectInputStream.readObject();//read changed message
 		
@@ -244,7 +244,7 @@ public class Client {
 		
 		try{
 			Message standMessage = new Message(MessageType.GAME, "stand" , null, 0);
-			objectOutputStream.writeObject(standMessage); //send to server logout request
+			objectOutputStream.writeObject(standMessage);
 		
 			standMessage = (Message)objectInputStream.readObject();//read changed message
 		
@@ -297,7 +297,7 @@ public class Client {
 				if(gameMessage.getAction().equals("dealer")) {	//when its dealers action return the text of the all dealers card
 					return gameMessage.getText();
 				}
-				if(gameMessage.getText().contains("username: ")) { //when a players status message is sent it will update the status label in gui
+				if(gameMessage.getText().startsWith("username: ")) { 	//when a players status message is sent it will update the status label in gui
 					return gameMessage.getText();
 				}
 			}
