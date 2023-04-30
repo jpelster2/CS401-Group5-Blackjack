@@ -70,17 +70,22 @@ public class Game {
 		Dealer dealer = getDealer(); 
 		for(int i = 0; i < gameLobby.size(); i++) {
 			int playerScore = gameLobby.get(i).currentScore();
+			System.out.println(gameLobby.get(i).getUsername() + "'s ending score:" + gameLobby.get(i).currentScore());
 			int dealerScore = dealer.currentScore(); 
-			if((playerScore > dealerScore) && (playerScore >= 21)) {
+			if((playerScore > dealerScore) && (playerScore <= 21)) {
 				float betAmount = gameLobby.get(i).getCurrentBet(); 
 				float winnings = (betAmount/2) + betAmount; 
 				gameLobby.get(i).addFunds(winnings);
 			}
-			else if(dealerScore > playerScore) {
+			else if((dealerScore > playerScore) || (playerScore > 21)) {
 				float betAmount = gameLobby.get(i).getCurrentBet(); 
 				gameLobby.get(i).removeFunds(betAmount);
-			}
+			} 
 		}
+		for(int i =0; i < gameLobby.size(); i++) {
+			System.out.println(gameLobby.get(i).getUsername() + "'s current balance:" + gameLobby.get(i).getBalance());
+		}
+		resetGame(); 
 	 }
 	 public int getPlayerCount() { 
 		 ArrayList<Player> gameLobby = getGameLobby(); 
@@ -92,7 +97,7 @@ public class Game {
 		 ArrayList<Player> gameLobby = getGameLobby(); 
 		 for(int i = 0; i < gameLobby.size(); i++) {
 			 Scanner in = new Scanner(System.in); 
-			 System.out.println("Enter the amount of the bet you would like to place: "); 
+			 System.out.println( gameLobby.get(i).getUsername() +  " enter the amount of the bet you would like to place: "); 
 			 float betAmount = in.nextFloat();
 			 gameLobby.get(i).setCurrentBet(betAmount); 
 			 totalBets+=betAmount; 
@@ -126,23 +131,64 @@ public class Game {
 		 setGameLobby(arr); 
 		 Dealer dealer = new Dealer(); 
 		 setDealer(dealer); 
+		 setTurn(0); 
 	 }
 	 public void nextTurn() {
-		 Scanner in = new Scanner(System.in); 
-		 for(int i = 0; i < gameLobby.size(); i++) {
-			 System.out.println(gameLobby.get(i).getUsername() + " Hit or Stand"); 
-			 String choice = in.nextLine(); 
-			 choice = choice.toUpperCase();
-			 if(choice.equals("HIT")) {
-				 dealCard(gameLobby.get(i)); 
-				 System.out.println( gameLobby.get(i).getUsername() + " has been dealt a card."); 
-			 }else if (choice.equals("STAND")) {
-				 System.out.println( gameLobby.get(i).getUsername() + " has chosen to stand and end their turn.");
+		 ArrayList<Player> gameLobby = getGameLobby(); 
+		 int i = getTurn(); 
+		if(getTurn() + 1 > gameLobby.size()) {
+			setTurn(0);
+		}
+		else {
+			setTurn(i+1); 
+		}
+	 }
+	 public void dealersTurn() {
+		 //Add function that will have a dealer turn that will do hut until 17 has been hit 
+		 // Anything under 17 the dealer will hit 
+		 //above 17 it stops
+		 Dealer dealer = getDealer(); 
+		 int dealerScore = dealer.currentScore();
+		 while(dealerScore <= 17) {
+			 System.out.println("Dealer has chosen hit"); 
+			 dealer.drawCard();
+			 dealerScore = dealer.currentScore();
+			 System.out.println("Dealer Score:" + dealer.currentScore()); 
+		 }
+		 System.out.println("Dealer has chosen stand"); 
+		 awardPool(getGameLobby());
+	 }
+	 public void beginGame(){
+		 boolean playGame = true; 
+		 Scanner in = new Scanner(System.in);
+		 collectPool(); 
+		 dealer.drawCard();
+		 System.out.println("Dealer's Card: " + dealer.getHand().get(0).getName());
+		 while(playGame) {
+			 int turn = getTurn(); 
+			 if(turn == gameLobby.size()) {
+				 dealersTurn();
+				 playGame = false; 
+			}else {
+				 boolean continueRound = true; 
+				 while(continueRound) {
+					 System.out.println(gameLobby.get(turn).getUsername() + " Hit or Stand? ");
+					 String choice = in.nextLine(); 
+					 choice = choice.toUpperCase();
+					 int playerScore = gameLobby.get(turn).currentScore();
+					 if((choice.equals("HIT")) && (playerScore < 21)) {
+						 dealCard(gameLobby.get(turn)); 
+						 System.out.println( gameLobby.get(turn).getUsername() + " has been dealt a card."); 
+					 }else if ((choice.equals("STAND")) || playerScore >= 21) {
+						 System.out.println( gameLobby.get(turn).getUsername() + " has chosen to stand and end their turn.");
+						 continueRound = false; 
+					 }
+				 }
+				 nextTurn(); 
 			 }
 		 }
 		 in.close(); 
 	 }
-	 //Add function to check for blackjack specifically, this will be called after the cards are initally dealed
-	 // Add function maybe for dealers turn
+	 
 }
 
