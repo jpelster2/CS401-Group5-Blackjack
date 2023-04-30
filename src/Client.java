@@ -340,7 +340,7 @@ public class Client {
 		
 	}
 	
-	public static void dobet(String betBalance) {
+	public static String dobet(String betBalance) {
 		
 		try{
 			Message gameMessage = new Message(MessageType.GAME, "bet" , betBalance, 0);
@@ -349,14 +349,17 @@ public class Client {
 			gameMessage = (Message)objectInputStream.readObject();//read changed message
 			if(gameMessage.getText().equals("success")) {
 				JOptionPane.showMessageDialog(null, "Bet placed","Bet Update", JOptionPane.INFORMATION_MESSAGE);
+				return gameMessage.getText();
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "You are too broke to do that","Bet Update", JOptionPane.ERROR_MESSAGE);
+				return gameMessage.getText();
 			}
 		
 		}catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		} 
 		
 	}

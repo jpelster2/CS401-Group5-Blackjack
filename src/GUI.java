@@ -81,7 +81,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
             	Client.doLeaveGame();
-            	statusLabel.setText(statusLabel.getText()+" Player Left");
+            	statusLabel.setText(statusLabel.getText()+" Player Left ");
             	frame.dispose();
                 Client.lobby();
             }
@@ -105,8 +105,8 @@ public class GUI {
             		turn = Client.doWhosTurn();
             		statusLabel.setText(statusLabel.getText()+ turn +" Player's turn. ");
             		if(turn.equals("dealer")) {
-            			statusLabel.setText(statusLabel.getText()+ turn +" Dealer's turn. ");
-            			dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
+            			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
+            			dealerHandLabel.setText("Dealer Hand: "+turn);
             			Client.doWinnings();
             			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
             		}
@@ -126,10 +126,11 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
 
                 String betBalance = JOptionPane.showInputDialog("Enter the amount to bet: ");
-                Client.dobet(betBalance);
+                String bet = Client.dobet(betBalance);
                 
-                statusLabel.setText(statusLabel.getText()+"Player bet: " + betBalance);
-
+                if(bet.equals("success")) {
+                	statusLabel.setText(statusLabel.getText()+"Player bet: " + betBalance +" ");
+                }
             }
         });
         
