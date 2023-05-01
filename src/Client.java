@@ -261,7 +261,7 @@ public class Client {
 	public static String doGameStart() {
 		
 		try{
-			Message gameMessage = new Message(MessageType.GAME, "status" , "start", 0);
+			Message gameMessage = new Message(MessageType.GAME, "start" , "", 0);
 			objectOutputStream.writeObject(gameMessage); //send to server logout request
 		
 			gameMessage = (Message)objectInputStream.readObject();//read changed message

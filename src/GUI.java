@@ -108,6 +108,7 @@ public class GUI {
             			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
             			dealerHandLabel.setText("Dealer Hand: "+turn);
             			Client.doWinnings();
+            			startGameButton.setEnabled(true);
             			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
             		}
             	}
@@ -115,7 +116,6 @@ public class GUI {
             		hitButton.setEnabled(true);
                     standButton.setEnabled(true);
                     startGameButton.setEnabled(true);
-                    betGameButton.setEnabled(true);
             		statusLabel.setText(statusLabel.getText()+ "Your turn. ");
             	}
             }

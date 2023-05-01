@@ -162,6 +162,7 @@ public class Server {
 								reply = new Message(MessageType.GAME, "stand", activePlayerName, 0);
 							}
 						} else if (action.equals("start")) {
+							thisGame.beginGame();
 							String dealersCard = thisGame.getDealer().getHand().get(0).getName();
 							reply = new Message(MessageType.GAME, "status", dealersCard, 0);
 						} else if (action.equals("status")) {

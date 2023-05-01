@@ -14,6 +14,7 @@ public class Game {
 		setHouseBalance(100000000);
 		dealer = new Dealer();
 		gameLobby = new ArrayList<Player>();
+		isActive = false;
 	}
 	 public void setId(int id) {
 		this.id = id; 
@@ -63,11 +64,18 @@ public class Game {
 				float betAmount = p.getCurrentBet(); 
 				float winnings = (betAmount/2) + betAmount; 
 				p.addFunds(winnings);
+				System.out.println(p.getUsername() + " won!");
 			// Player lost or busted?
 			} else if ((dealerScore >= playerScore) || (playerScore > 21)) {
 				float betAmount = p.getCurrentBet(); 
 				p.removeFunds(betAmount);
-			} 
+				
+				if (playerScore > 21)
+					System.out.println(p.getUsername() + " busted!");
+				else
+					System.out.println(p.getUsername() + " lost!");
+			}
+			p.emptyHand();
 		}
 		for(int i =0; i < gameLobby.size(); i++) {
 			System.out.println(gameLobby.get(i).getUsername() + "'s current balance:" + gameLobby.get(i).getBalance());
@@ -95,10 +103,9 @@ public class Game {
 	public void dealersTurn() {
 		 //Add function that will have a dealer turn that will do hut until 17 has been hit 
 		 // Anything under 17 the dealer will hit 
-		 //above 17 it stops
-		 Dealer dealer = getDealer(); 
+		 // above or equal to 17 it stops.
 		 int dealerScore = dealer.currentScore();
-		 while(dealerScore <= 17) {
+		 while (dealerScore < 17) {
 			 System.out.println("Dealer has chosen hit"); 
 			 dealer.drawCard();
 			 dealerScore = dealer.currentScore();
@@ -106,6 +113,7 @@ public class Game {
 		 }
 		 System.out.println("Dealer has chosen stand"); 
 		 awardPool();
+		 dealer.emptyHand();
 		 isActive = false;
 	}
 	
