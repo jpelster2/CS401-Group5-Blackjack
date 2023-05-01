@@ -322,11 +322,7 @@ public class Client {
 			gameMessage = (Message)objectInputStream.readObject();//read changed message
 			
 			if(!gameMessage.getText().equals("0")) {
-				Message balanceMessage = new Message(MessageType.BALANCE, "add",gameMessage.getText(),0); //sends message that has a balance type with add action and amount to add
-				objectOutputStream.writeObject(balanceMessage); //send to server logout request
-			
-				balanceMessage = (Message)objectInputStream.readObject();//read changed message
-				JOptionPane.showMessageDialog(null, "User Balance updated to: "+balanceMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "User Balance updated to: "+gameMessage.getText(),"Balance Update", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "You lose :(","Balance Update", JOptionPane.INFORMATION_MESSAGE);
