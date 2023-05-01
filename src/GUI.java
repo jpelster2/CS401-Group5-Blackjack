@@ -32,7 +32,9 @@ public class GUI {
         dealerHandLabel = new JLabel("Dealer Hand: ");
         statusLabel = new JLabel("Status: ");
         hitButton = new JButton("Hit");
+        hitButton.setEnabled(false);
         standButton = new JButton("Stand");
+        standButton.setEnabled(false);
         leaveGameButton = new JButton("Leave Game");
         startGameButton = new JButton("Start Game");
         betGameButton = new JButton("Bet Amount");
