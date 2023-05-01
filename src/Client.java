@@ -277,7 +277,7 @@ public class Client {
 		
 	}
 	
-	public static String doWhosTurn() {
+	public static Message doWhosTurn() {
 		Message gameMessage = new Message(MessageType.GAME, "status" , loginUsername, 0);
 		try{
 			
@@ -295,14 +295,14 @@ public class Client {
 				gameMessage = (Message)objectInputStream.readObject();//read changed message
 				
 				if(gameMessage.getAction().equals("dealer")) {	//when its dealers action return the text of the all dealers card
-					return gameMessage.getText();
+					return gameMessage;
 				}
 				if(gameMessage.getText().startsWith("username: ")) { 	//when a players status message is sent it will update the status label in gui
-					return gameMessage.getText();
+					return gameMessage;
 				}
 			}
 		
-			return gameMessage.getAction(); //when the go action is called for player return the text will be the players username and will add that to status label in gui
+			return gameMessage; //when the go action is called for player return the text will be the players username and will add that to status label in gui
 
 		
 		}catch (ClassNotFoundException | IOException e) {

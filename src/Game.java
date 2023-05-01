@@ -115,7 +115,6 @@ public class Game {
 		 }
 		 System.out.println("Dealer has chosen stand"); 
 		 awardPool();
-		 dealer.emptyHand();
 		 isActive = false;
 	}
 	
@@ -124,6 +123,7 @@ public class Game {
 			setTurn(0);
 			setHouseBalance(1000000);
 			// Draw the dealer's first card
+			dealer.emptyHand();
 			dealer.drawCard();
 			// Set the game to active so trying to reset/begin it won't destroy an in-progress session
 			isActive = true;

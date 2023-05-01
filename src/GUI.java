@@ -57,9 +57,26 @@ public class GUI {
             	String hit = Client.doHit();
             	statusLabel.setText(statusLabel.getText()+" Player has hit. ");
             	playerHandLabel.setText(playerHandLabel.getText()+" "+hit);
-            	if(hit.equals("player busted")) {
+            	if(hit.equals("busted")) {
+            		//disable buttons until the dealers turn comes and the round is over. 
+                	hitButton.setEnabled(false);
+                    standButton.setEnabled(false);
+                    startGameButton.setEnabled(false);
+                    betGameButton.setEnabled(false);
             		Client.doStand();
             		statusLabel.setText(statusLabel.getText()+" Player has passed their turn. ");
+            	
+            		while (true) {
+                		Message msg = Client.doWhosTurn();
+                		statusLabel.setText(statusLabel.getText()+ msg.getText() +" Player's turn. ");
+                		if(msg.getAction().equals("dealer")) {
+                			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
+                			dealerHandLabel.setText("Dealer Hand: "+msg.getText());
+                			Client.doWinnings();
+                			startGameButton.setEnabled(true);
+                			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
+                		}
+                	}
             	}
             }
         });
@@ -71,11 +88,23 @@ public class GUI {
             	hitButton.setEnabled(false);
                 standButton.setEnabled(false);
                 startGameButton.setEnabled(false);
+                betGameButton.setEnabled(false);
                 
                 String stand = Client.doStand();
                 
                 statusLabel.setText(statusLabel.getText()+ stand + " is up next. ");
 
+                while (true) {
+            		Message msg = Client.doWhosTurn();
+            		statusLabel.setText(statusLabel.getText()+ msg.getText() +" Player's turn. ");
+            		if(msg.getAction().equals("dealer")) {
+            			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
+            			dealerHandLabel.setText("Dealer Hand: "+msg.getText());
+            			Client.doWinnings();
+            			startGameButton.setEnabled(true);
+            			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
+            		}
+            	}
             }
         });
         
@@ -95,7 +124,10 @@ public class GUI {
             	String turn = null;
             	
             	turn = Client.doGameStart();
+            	dealerHandLabel.setText("Dealer's Hand: ");
             	dealerHandLabel.setText(dealerHandLabel.getText()+" "+turn);
+            	playerHandLabel.setText("Player's hand: ");
+            	statusLabel.setText("Status: ");
             	statusLabel.setText(statusLabel.getText()+ turn +" The game has begun! ");
             	
             	hitButton.setEnabled(false);
@@ -103,23 +135,19 @@ public class GUI {
                 startGameButton.setEnabled(false);
                 betGameButton.setEnabled(false);
                 
-            	while(!turn.equals("go")) {
-            		turn = Client.doWhosTurn();
-            		statusLabel.setText(statusLabel.getText()+ turn +" Player's turn. ");
-            		if(turn.equals("dealer")) {
-            			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
-            			dealerHandLabel.setText("Dealer Hand: "+turn);
-            			startGameButton.setEnabled(true);
-            			Client.doWinnings();
-            			//break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
-            		}
+            	while(true) {
+            		Message msg = Client.doWhosTurn();
+            		if (msg.getAction().equals("go"))
+            			break;
+            		turn = msg.getText();
+            		statusLabel.setText(statusLabel.getText()+ turn + " Player's turn. ");
             	}
-            	if (turn.equals("go")) {
-            		hitButton.setEnabled(true);
-                    standButton.setEnabled(true);
-                    startGameButton.setEnabled(true);
-            		statusLabel.setText(statusLabel.getText()+ "Your turn. ");
-            	}
+            	
+        		hitButton.setEnabled(true);
+                standButton.setEnabled(true);
+                betGameButton.setEnabled(true);
+                startGameButton.setEnabled(false);
+        		statusLabel.setText(statusLabel.getText()+ "Your turn. ");
             }
         });
         

@@ -64,7 +64,7 @@ public class Server {
 		private final Socket clientSocket;
 		private ClientStatus status;
 		private int tableNum;
-		private int balance;
+		private float balance;
 		private Player player;
 		
 		public ClientHandler(Socket socket) {
@@ -112,21 +112,21 @@ public class Server {
 						break;
 					case BALANCE:
 						if (action.equals("request")) {
-							reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+							reply = new Message(MessageType.BALANCE, "amount", Float.toString(balance), 0);
 							System.out.println("User \""+username+"\" requested their balance info.");
 						} else if (action.equals("add")) {
-							balance += Integer.valueOf(text);
+							balance += Float.valueOf(text);
 							player.setBalance(balance);
-							reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+							reply = new Message(MessageType.BALANCE, "amount", Float.toString(balance), 0);
 							System.out.println("User \""+username+"\" added $"+text+" to their balance.");
 						} else if (action.equals("remove")) {
-							if (balance - Integer.valueOf(text) < 0) {
-								reply = new Message(MessageType.BALANCE, "error", Integer.toString(balance), 0);
+							if (balance - Float.valueOf(text) < 0) {
+								reply = new Message(MessageType.BALANCE, "error", Float.toString(balance), 0);
 								System.out.println("User \""+username+"\" tried to subtract $"+text+" from their balance, but didn't have enough money.");
 							} else {
-								balance -= Integer.valueOf(text);
+								balance -= Float.valueOf(text);
 								player.setBalance(balance);
-								reply = new Message(MessageType.BALANCE, "amount", Integer.toString(balance), 0);
+								reply = new Message(MessageType.BALANCE, "amount", Float.toString(balance), 0);
 								System.out.println("User \""+username+"\" subtracted $"+text+" from their balance.");
 							}
 						}
@@ -138,7 +138,10 @@ public class Server {
 							thisGame.dealCard(player);
 							// Get the last card in their hand, which should be the most recently-added.
 							Card newCard = player.getHand().get(player.getHand().size() - 1);
-							reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
+							if (player.currentScore() > 21)
+								reply = new Message(MessageType.GAME, "card", "busted", 0);
+							else
+								reply = new Message(MessageType.GAME, "card", newCard.getName(), 0);
 							System.out.println("Player \""+username+"\" hit, gaining new card "+newCard.getName());
 						} else if (action.equals("stand")) {
 							// Increment turn number
@@ -192,13 +195,20 @@ public class Server {
 								}
 							}
 						} else if (action.equals("bet")) {
-							int amount = Integer.valueOf(text);
+							float amount = Float.valueOf(text);
 							if (balance - amount < 0) {
 								reply = new Message(MessageType.GAME, "bet", "too_broke", 0);
 							} else {
 								player.setCurrentBet(amount);
 								reply = new Message(MessageType.GAME, "bet", "success", 0);
 							}
+						} else if (action.equals("winnings")) {
+							if (player.getBalance() > balance) {
+								reply = new Message(MessageType.GAME, "balance", Float.toString(player.getBalance()), 0);
+							} else {
+								reply = new Message(MessageType.GAME, "balance", "0", 0);
+							}
+							balance = player.getBalance();
 						}
 						break;
 					case LOBBY:
