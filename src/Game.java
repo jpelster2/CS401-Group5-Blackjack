@@ -58,9 +58,11 @@ public class Game {
 		 for(Player p : gameLobby) {
 			int playerScore = p.currentScore();
 			System.out.println(p.getUsername() + "'s ending score:" + p.currentScore());
-			int dealerScore = dealer.currentScore(); 
+			int dealerScore = dealer.currentScore();
+			if (dealerScore > 21)
+				System.out.println("Dealer busted!");
 			// Player won?
-			if ((playerScore > dealerScore) && (playerScore <= 21)) {
+			if ((playerScore > dealerScore || dealerScore > 21) && (playerScore <= 21)) {
 				float betAmount = p.getCurrentBet(); 
 				float winnings = (betAmount/2) + betAmount; 
 				p.addFunds(winnings);

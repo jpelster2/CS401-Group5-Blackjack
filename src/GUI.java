@@ -109,9 +109,9 @@ public class GUI {
             		if(turn.equals("dealer")) {
             			statusLabel.setText(statusLabel.getText()+" Dealer's turn. ");
             			dealerHandLabel.setText("Dealer Hand: "+turn);
-            			Client.doWinnings();
             			startGameButton.setEnabled(true);
-            			break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
+            			Client.doWinnings();
+            			//break;	// ADDED BY JAMES AND GRAYSON SINCE WE THINK WE NEED IT
             		}
             	}
             	if (turn.equals("go")) {
