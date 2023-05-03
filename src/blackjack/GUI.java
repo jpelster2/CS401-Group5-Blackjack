@@ -39,6 +39,7 @@ public class GUI {
         leaveGameButton = new JButton("Leave Game");
         startGameButton = new JButton("Start Game");
         betGameButton = new JButton("Bet Amount");
+        betGameButton.setEnabled(false);
 
         mainPanel.add(playerHandLabel, BorderLayout.NORTH);
         mainPanel.add(dealerHandLabel, BorderLayout.CENTER);
