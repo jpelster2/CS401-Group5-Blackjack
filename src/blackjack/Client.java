@@ -12,29 +12,64 @@ public class Client {
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String serverAddress = JOptionPane.showInputDialog("Enter the address you want to connect to");
-		int serverPort = Integer.parseInt(JOptionPane.showInputDialog("Enter the port you want to connect to"));
+		String serverPortString = JOptionPane.showInputDialog("Enter the port you want to connect to");
+		if (serverAddress == null || serverPortString == null) {
+			JOptionPane.showMessageDialog(null, "Either the address or port number entry was cancelled. Closing...", "Cancelled", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		int serverPort = Integer.parseInt(serverPortString);
 		
 		// Connect to the ServerSocket at host:port
-		socket = new Socket(serverAddress, serverPort);
-		JOptionPane.showMessageDialog(null, "Connected to server: "+serverAddress+" on port: "+serverPort, "Connection Status", JOptionPane.INFORMATION_MESSAGE);
-		
-		// Create object output stream from the output stream to send an object through it
-		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-		objectInputStream = new ObjectInputStream(socket.getInputStream());
-		
-		loginUsername = JOptionPane.showInputDialog("Login with username or cancel to close");
-		Message loginMessage = new Message(MessageType.LOGIN, "login",loginUsername,0); 
-		objectOutputStream.writeObject(loginMessage); //send to server login request with username
-		
-		loginMessage = (Message)objectInputStream.readObject(); //read changed message
-		if(loginMessage.getText().equals("success")) { 
-			JOptionPane.showMessageDialog(null, "Login successful","Login Successful", JOptionPane.INFORMATION_MESSAGE);
+		try {
+			
+			socket = new Socket(serverAddress, serverPort);
+			JOptionPane.showMessageDialog(null, "Connected to server: "+serverAddress+" on port: "+serverPort, "Connection Status", JOptionPane.INFORMATION_MESSAGE);
+			
+			// Create object output stream from the output stream to send an object through it
+			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			objectInputStream = new ObjectInputStream(socket.getInputStream());
+			
+			loginUsername = JOptionPane.showInputDialog("Login with username or cancel to close");
+			Message loginMessage = new Message(MessageType.LOGIN, "login",loginUsername,0); 
+			objectOutputStream.writeObject(loginMessage); //send to server login request with username
+			
+			loginMessage = (Message)objectInputStream.readObject(); //read changed message
+			if(loginMessage.getText().equals("success")) { 
+				JOptionPane.showMessageDialog(null, "Login successful","Login Successful", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Login failed","Login Error", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			lobby();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "An unexpected error occurred trying to connect.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		} finally {
+			if (objectOutputStream != null) {
+				try {
+					objectOutputStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (objectInputStream != null) {
+				try {
+					objectInputStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Login failed","Login Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		lobby();
 	}
 	
 	public static void lobby() {
