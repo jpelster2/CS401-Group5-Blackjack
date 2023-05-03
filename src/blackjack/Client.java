@@ -1,3 +1,4 @@
+package blackjack;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -66,7 +67,7 @@ public class Client {
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
-			JOptionPane.showMessageDialog(null, "Joined Game 1 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "Joined Game 1 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
 			inLobbyMenu = false;
 			new GUI();
@@ -85,7 +86,7 @@ public class Client {
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
-			JOptionPane.showMessageDialog(null, "Joined Game 2 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "Joined Game 2 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
 			inLobbyMenu = false;
 			new GUI();
@@ -104,7 +105,7 @@ public class Client {
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
-			JOptionPane.showMessageDialog(null, "Joined Game 3 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "Joined Game 3 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
 			inLobbyMenu = false;
 			new GUI();
@@ -123,7 +124,7 @@ public class Client {
 			objectOutputStream.writeObject(joinGameMessage); //send to server join game request
 		
 			joinGameMessage = (Message)objectInputStream.readObject(); //read changed message
-			JOptionPane.showMessageDialog(null, "Joined Game 4 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "Joined Game 4 ","Join Successful", JOptionPane.INFORMATION_MESSAGE);
 			
 			inLobbyMenu = false;
 			new GUI();
@@ -142,7 +143,7 @@ public class Client {
 			objectOutputStream.writeObject(leaveGameMessage); //send to server join game request
 		
 			leaveGameMessage = (Message)objectInputStream.readObject(); //read changed message
-			JOptionPane.showMessageDialog(null, "Left the Game ","Leave Successful", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "Left the Game ","Leave Successful", JOptionPane.INFORMATION_MESSAGE);
 			
 		
 		} catch (ClassNotFoundException | IOException e) {

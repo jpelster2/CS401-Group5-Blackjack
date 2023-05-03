@@ -1,3 +1,4 @@
+package blackjack;
 
 public enum MessageType {
 	LOGIN,

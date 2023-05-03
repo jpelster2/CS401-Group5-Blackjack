@@ -1,3 +1,4 @@
+package blackjack;
 import java.util.*;
 
 public class Dealer {
@@ -103,6 +104,9 @@ public class Dealer {
 	}
 	public ArrayList<Card> getHand(){
 		return hand;
+	}
+	public ArrayList<Card> getDeck() {
+		return deck;
 	}
 	public int currentScore() {
 		// Cards 2-10 are worth their face value 
